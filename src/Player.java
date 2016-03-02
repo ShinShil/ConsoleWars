@@ -38,8 +38,15 @@ public class Player implements INamedObject {
 		fireDefense = new Defense("fire");
 	}
 	
+	//getter
 	public String getName() {
 		return name;
+	}
+	public int getHP() {
+		return healthPoint;
+	}
+	public int getDefFire() {
+		return fireDefense.getPoints();
 	}
 	
 	public void show() {
@@ -74,11 +81,13 @@ public class Player implements INamedObject {
 	}
 	public void cast(String castLine, ArrayList<Player> pls) {
 		//will the search in a list 
+		String tmp = getNameFromCastLine(castLine);
+		System.out.println("TMP: " + tmp);
 		int index = findByName(pls, getNameFromCastLine(castLine));
 		if(index != -1) {
 			int indexSkill = findByName(skills, getSkillFromCastLine(castLine));
 			if(indexSkill == -1) {
-				System.out.println(getSkillFromCastLine(castLine) + " wasn't found");
+				//System.out.println(getSkillFromCastLine(castLine) + " wasn't found");
 				return;
 			}
 			skills.get(indexSkill).Cast(this, pls.get(index));
