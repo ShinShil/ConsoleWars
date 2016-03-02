@@ -22,11 +22,13 @@ public class ConfirmBox {
 			answer = true;
 			window.close();
 		});
+		yesButton.defaultButtonProperty().bind(yesButton.focusedProperty());
 		Button noButton = new Button("No");
 		noButton.setOnAction(e -> {
 			answer = false;
 			window.close();
 		});
+		noButton.defaultButtonProperty().bind(noButton.focusedProperty());
 		
 		
 		VBox layout = new VBox(20);
