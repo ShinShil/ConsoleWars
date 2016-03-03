@@ -79,7 +79,7 @@ public class Player implements INamedObject {
 			return "error";
 		}
 	}
-	public void cast(String castLine, ArrayList<Player> pls) {
+	public int cast(String castLine, ArrayList<Player> pls) {
 		//will the search in a list 
 		String tmp = getNameFromCastLine(castLine);
 		System.out.println("TMP: " + tmp);
@@ -87,13 +87,15 @@ public class Player implements INamedObject {
 		if(index != -1) {
 			int indexSkill = findByName(skills, getSkillFromCastLine(castLine));
 			if(indexSkill == -1) {
-				//System.out.println(getSkillFromCastLine(castLine) + " wasn't found");
-				return;
+				System.out.println(getSkillFromCastLine(castLine) + " wasn't found");
+				return 1;
 			}
 			skills.get(indexSkill).Cast(this, pls.get(index));
 		}else {
 			System.out.println("doesn't find this player");
+			return 2;
 		}
+		return 0;
 	}
 	//effects
 	public int damage(int points, String type) {

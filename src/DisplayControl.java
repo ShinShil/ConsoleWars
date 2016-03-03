@@ -3,6 +3,7 @@ package application;
 import java.util.ArrayList;
 
 import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 public class DisplayControl {
@@ -27,7 +28,9 @@ public class DisplayControl {
 		currDef = new Label(String.format("%d", currPlayer.getDefFire()));
 		currName = new Label(currPlayer.getName());
 		
-		currName.setFont(new Font("arial", 24));
+		currHp.setFont(new Font("Arial", 16));
+		currDef.setFont(new Font("Arial", 16));
+		currName.setFont(new Font("Arial", 16));
 		
 		this.pls = pls;
 		int size = pls.size();
@@ -38,6 +41,9 @@ public class DisplayControl {
 			hp.add(new Label());
 			defs.add(new Label());
 			names.add(new Label());
+			hp.get(i).setFont(new Font("Arial", 16));
+			defs.get(i).setFont(new Font("Arial", 16));
+			names.get(i).setFont(new Font("Arial", 16));
 		}
 		System.out.println("SIZE: " + hp.size() + " Players size: " + size);
 		this.refreshVals();
@@ -82,8 +88,20 @@ public class DisplayControl {
 		currDef.setText(String.format("%d", currPlayer.getDefFire()));
 		currName.setText(currPlayer.getName());
 		for(int i = 0; i<pls.size(); ++i) {
-			hp.get(i).setText(String.format("%d", pls.get(i).getHP()));
-			defs.get(i).setText(String.format("%d", pls.get(i).getDefFire()));
+			String tHp = String.format("%d", pls.get(i).getHP());
+			String tDef = String.format("%d", pls.get(i).getDefFire());
+			if(hp.get(i).getText().equals(tHp)) {
+				hp.get(i).setTextFill(Color.BLACK);
+			}else {
+				hp.get(i).setTextFill(Color.RED);
+			}
+			if(defs.get(i).getText().equals(tDef)) {
+				defs.get(i).setTextFill(Color.BLACK);
+			}else {
+				defs.get(i).setTextFill(Color.RED);
+			}
+			hp.get(i).setText(tHp);
+			defs.get(i).setText(tDef);
 			names.get(i).setText(pls.get(i).getName());
 		}
 	} 
