@@ -1,4 +1,4 @@
-package application;
+package gameLogic;
 
 public class Defense implements INamedObject {
 	private int points;

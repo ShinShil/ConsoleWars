@@ -1,7 +1,8 @@
-package application;
+package gameDisplay;
 
 import java.util.ArrayList;
 
+import gameLogic.Player;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;

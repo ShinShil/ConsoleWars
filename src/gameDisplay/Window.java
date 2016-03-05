@@ -1,8 +1,10 @@
-package application;
+package gameDisplay;
 
+import application.ConfirmBox;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import pvp.Pvp;
 
 public class Window {
 	private Stage window;
@@ -49,6 +51,11 @@ public class Window {
 	public void startMenu() {
 		MainMenu menu = new MainMenu();
 		menu.start(this);
+	}
+	
+	public void startPvp() {
+		Pvp pvp = new Pvp();
+		pvp.start(this);
 	}
 	
 	public void close() {

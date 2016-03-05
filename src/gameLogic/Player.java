@@ -1,4 +1,4 @@
-package application;
+package gameLogic;
 import java.util.ArrayList;
 
 public class Player implements INamedObject {

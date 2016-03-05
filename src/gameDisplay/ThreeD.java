@@ -1,9 +1,12 @@
-package application;
+package gameDisplay;
 //this is effects polygon
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import animation.Emmiter;
+import animation.FireEmmiter;
+import animation.Particle;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,7 +16,7 @@ import javafx.scene.effect.BlendMode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
-public class ThreeD extends GameScene{
+public class ThreeD implements GameScene{
 
 	private Emmiter emitter = new FireEmmiter();
 	
@@ -42,7 +45,7 @@ public class ThreeD extends GameScene{
 		g.setFill(Color.BLACK);
 		g.fillRect(0,0,600,600);
 		
-		particles.addAll(emitter.emit(x, y));
+		particles.addAll(emitter.emmit(300, 300));
 		x+=deltax;
 		y-=delta;
 		if(y<0 || y>600) {
@@ -52,6 +55,7 @@ public class ThreeD extends GameScene{
 			deltax *= -1;
 		}
 		
+		System.out.println(particles.size());
 		for(Iterator<Particle> it = particles.iterator(); it.hasNext();) {
 			Particle p = it.next();
 			p.update();

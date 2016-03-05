@@ -1,4 +1,8 @@
-package application;
+package gameDisplay;
+
+import application.AlertBox;
+import gameLogic.Player;
+import gameLogic.Room;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -28,7 +32,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-public class DuelGame extends GameScene{
+public class DuelGame implements GameScene{
 	int chatsAmount = 2;
 	Scene clientGame;
 	Room room = new Room(2);

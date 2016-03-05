@@ -1,10 +1,10 @@
-package application;
+package gameLogic;
 import java.util.ArrayList;
 import java.util.Scanner;
 public class Room {
 	ArrayList<Player> pls;
 	int active;
-	Room(int playerAmount) {
+	public Room(int playerAmount) {
 		pls = new ArrayList<Player>();
 		pls.add(new Player("p1"));
 		pls.add(new Player("p2"));

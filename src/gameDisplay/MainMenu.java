@@ -1,4 +1,4 @@
-package application;
+package gameDisplay;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

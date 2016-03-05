@@ -1,4 +1,4 @@
-package application;
+package gameLogic;
 
 public class Skill implements INamedObject{
 	public String getName() {

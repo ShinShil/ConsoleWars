@@ -1,4 +1,4 @@
-package application;
+package animation;
 
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
