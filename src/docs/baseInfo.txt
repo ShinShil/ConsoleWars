@@ -1,0 +1,16 @@
+animation - all classes that provides animation, down classes: FireEffect, they call logic methods on the end and start of animation
+
+
+gameDisplay - rules for displaying, down classes: DuelGame, MainMenu, ThreeD, Pvp(will be too in the future) they consists of two parts control(it 
+	refreshes values on layout and load them from settings - hp, defPoint, etc) and layout.
+
+
+gameLogic - the game, down classes: Player, Skill, Room(control for game situation), their methods are called by other classes, fact - this is game 
+	all other just displayng it
+
+
+application - classes that don't affect game, down classes: Main, it entry point, also load dependencies and resources.
+
+
+pvp - temporary package for development of grahic version
+
