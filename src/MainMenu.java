@@ -70,10 +70,15 @@ public class MainMenu {
 		exit.setOnAction(e -> {
 			window.confirmCloseProgram(window.getStage());
 		});
+		Button threeD = new Button("Three D");
+		threeD.setOnAction(e -> {
+			window.startThreeD();
+		});
+		setBtn(threeD);
 		setBtn(duelMode);
 		setBtn(settings);
 		setBtn(exit);
-		menu.getChildren().addAll(duelMode, settings, exit);
+		menu.getChildren().addAll(duelMode, settings, threeD, exit);
 		menu.setAlignment(Pos.BASELINE_CENTER);
 		menu.setSpacing(15);
 		
@@ -96,7 +101,7 @@ public class MainMenu {
 				new BackgroundPosition(Side.LEFT,0,false,Side.TOP,0, false),
 				BackgroundSize.DEFAULT);
 		root.setBackground(new Background(bi));
-		Scene scene = new Scene(root, 600,400);
+		Scene scene = new Scene(root, 600,500);
 		
 		window.setScene(scene);
 		window.show();

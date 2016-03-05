@@ -6,7 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
-public class DisplayControl {
+public class DisplayControl implements SceneControl {
 	ArrayList<Player> pls;
 	ArrayList<Label> hp;
 	ArrayList<Label> defs;

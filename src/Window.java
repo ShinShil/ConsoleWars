@@ -36,6 +36,11 @@ public class Window {
 		window.show();
 	}
 	
+	public void startThreeD() {
+		ThreeD threeD = new ThreeD();
+		threeD.start(this);
+	}
+	
 	public void startDuel() {
 		DuelGame duel = new DuelGame();
 		duel.start(this);

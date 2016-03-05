@@ -2,13 +2,21 @@ package application;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Side;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.effect.Lighting;
+import javafx.scene.effect.Light.Distant;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
@@ -20,22 +28,26 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-public class DuelGame {
+public class DuelGame extends GameScene{
 	int chatsAmount = 2;
 	Scene clientGame;
 	Room room = new Room(2);
-	DisplayControl dc = new DisplayControl(room.getPlayers(), room.getCurrPlayer());
 	VBox[] chats = new VBox[chatsAmount];
 	Label clientHP, clientDefFire;
+	DisplayControl control = new DisplayControl(room.getPlayers(), room.getCurrPlayer());
 	Player currPlayer = room.getCurrPlayer();
 	int oldLabel = 0;
 	
-	public void start(Window window) {
+	public DuelGame() {
+	}
+	@Override
+	public int start(Window window) {
 
 		VBox root = new VBox();
 		TextField commandLine = new TextField();
 		commandLine.setPromptText("action");
 		commandLine.setPrefWidth(1000);
+		commandLine.setFont(Font.font("arial", FontWeight.BOLD, 16));
 		commandLine.setOnAction(e -> {
 			int res = currPlayer.cast(commandLine.getText(), room.getPlayers());
 			Color col;
@@ -51,7 +63,7 @@ public class DuelGame {
 			chats[room.getCurrPlayerIndex()].getChildren().add(newLabel);
 			commandLine.setText("");
 			currPlayer = room.getNextPlayer();
-			dc.setNewCurrPlayer(currPlayer);
+			control.setNewCurrPlayer(currPlayer);
 			boolean answer = room.checkTheGameState();
 			if(!answer) {
 				Player loser = new Player("error");
@@ -63,7 +75,7 @@ public class DuelGame {
 				AlertBox.display("Result", "Game ended. The winner is: " + loser.getName());
 				window.close();
 			}
-			dc.refreshVals();
+			control.refreshVals();
 		});
 		HBox chats = addChats();
 		HBox tools = addTools(window);
@@ -83,12 +95,14 @@ public class DuelGame {
 		clientGame = new Scene(root, 800,600);
 		window.getStage().setScene(clientGame);
 		window.getStage().show();
+		return 0;
 	}
 
 	
 
 	private VBox addPlayers() {
 		VBox box = new VBox();
+		box.setStyle("-fx-background-color:rgba(255,255,0,0.5)");
 		box.setPrefWidth(200);
 		Label header = new Label();
 		header.setFont(new Font("arial", 20));
@@ -97,8 +111,8 @@ public class DuelGame {
 		header.setPrefWidth(200);
 		header.setPadding(new Insets(10,0,10,0));
 		box.getChildren().add(header);
-		dc.refreshVals();
-		for(int i = 0; i<dc.allPlayersInGame(); ++i) {
+		control.refreshVals();
+		for(int i = 0; i<control.allPlayersInGame(); ++i) {
 			HBox boxPlayer = new HBox();
 			Label hp = new Label(" HP: ");
 			Label def = new Label(" Def: ");
@@ -107,7 +121,7 @@ public class DuelGame {
 			//boxPlayer.getChildren().addAll(numLabe, dc.getLabelIndexName(i),hp, dc.getLabelIndexHp(i),def, dc.getLabelIndexDef(i));
 			
 			Label tmp = new Label(": ");
-			Label dummy = dc.getLabelIndexName(i);
+			Label dummy = control.getLabelIndexName(i);
 			dummy.setFont(Font.font("Arial", FontWeight.BOLD, 16));
 			tmp.setFont(Font.font("Arial", FontWeight.BOLD, 16));
 			HBox nameBox = new HBox(dummy, tmp);
@@ -116,7 +130,7 @@ public class DuelGame {
 			Label tmp3 = new Label(" ");
 			tmp3.setFont(Font.font("Arial", FontWeight.BOLD, 16));
 		
-			boxPlayer.getChildren().addAll(tmp3, nameBox, dc.getLabelIndexHp(i),tmp2, dc.getLabelIndexDef(i));
+			boxPlayer.getChildren().addAll(tmp3, nameBox, control.getLabelIndexHp(i),tmp2, control.getLabelIndexDef(i));
 			box.getChildren().add(boxPlayer);
 		}
 		return box;
@@ -126,11 +140,19 @@ public class DuelGame {
 		btn.setCursor(Cursor.HAND);
 		btn.defaultButtonProperty().bind(btn.focusedProperty());
 		btn.setFont(new Font("Arial", 16));
+
+		Distant light = new Distant();
+		light.setAzimuth(-135.0f);
+		Lighting l= new Lighting();
+		l.setLight(light);
+		l.setSurfaceScale(5.0f);
+		
+		btn.setEffect(l);
 	}
 	
 	private HBox addTools(Window window) {
 		HBox box = new HBox();
-		box.setStyle("-fx-background-color: #dedede; -fx-padding: 5 0 12 0");
+		box.setStyle("-fx-padding: 5 0 12 5");
 		Button goMenu = new Button("Go to menu");
 		goMenu.setOnAction(e -> {
 			window.startMenu();
@@ -144,6 +166,13 @@ public class DuelGame {
 		setBtn(exitBtn);
 		
 		box.setSpacing(5);
+		BackgroundImage bi = new BackgroundImage(
+				new Image("file:resources/theme/mainBg.jpg"), 
+				BackgroundRepeat.NO_REPEAT, 
+				BackgroundRepeat.NO_REPEAT,
+				new BackgroundPosition(Side.LEFT,0,false,Side.TOP,0, false),
+				BackgroundSize.DEFAULT);
+		box.setBackground(new Background(bi));
 		box.getChildren().addAll(goMenu, exitBtn);
 		return box;
 	}
@@ -151,6 +180,9 @@ public class DuelGame {
 	private VBox addPersonalInfo() {
 		VBox box = new VBox();
 		box.setPrefWidth(200);
+		//box.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
+		box.setStyle("-fx-background-color:rgba(255,255,0,0.5)");
+		
 		
 		Label header = new Label("Player");
 		header.setFont(new Font("arial", 20));
@@ -161,16 +193,16 @@ public class DuelGame {
 		HBox hitPoints = new HBox();
 		Label hits = new Label(" Hit points: ");
 		hits.setFont(Font.font("Arial", FontWeight.BOLD, 16));
-		hitPoints.getChildren().addAll(hits, dc.getCurrHp());
+		hitPoints.getChildren().addAll(hits, control.getCurrHp());
 
 		HBox defPoints = new HBox();
 		Label defs = new Label(" Fire defense: ");
 		defs.setFont(Font.font("Arial", FontWeight.BOLD, 16));
-		defPoints.getChildren().addAll(defs, dc.getCurrDef());
+		defPoints.getChildren().addAll(defs, control.getCurrDef());
 		
 		Label name = new Label(" Name: ");
 		name.setFont(Font.font("Arial", FontWeight.BOLD, 16));
-		HBox nameBox = new HBox(name, dc.getCurrName());
+		HBox nameBox = new HBox(name, control.getCurrName());
 		
 		box.getChildren().addAll(header, nameBox, hitPoints, defPoints);
 		return box;
