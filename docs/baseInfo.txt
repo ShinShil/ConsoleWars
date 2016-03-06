@@ -1,3 +1,7 @@
+##
+A lot of code need to be organised good:)
+##
+
 animation - all classes that provides animation, down classes: FireEffect, they call logic methods on the end and start of animation
 
 
