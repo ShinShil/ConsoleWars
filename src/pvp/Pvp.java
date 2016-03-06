@@ -2,6 +2,7 @@ package pvp;
 
 
 import animation.AnimationFire;
+import animation.FireEmmiter;
 import gameDisplay.GameScene;
 import gameDisplay.Window;
 import javafx.geometry.Insets;
@@ -27,12 +28,15 @@ import javafx.scene.text.Font;
 public class Pvp implements GameScene {
 	
 	private GraphicsContext g;
-	
+	private PvpControl control;
+	TextField input = new TextField();
 	@Override
 	public int start(Window window) {
 		Scene scene = new Scene(createContent());
 		
-		
+		if(window!=null) {
+			window.close();
+		}
 		window.setScene(scene);
 		window.show();
 		
@@ -54,21 +58,8 @@ public class Pvp implements GameScene {
 		root.setBackground(new Background(new BackgroundFill(Color.BLACK , new CornerRadii(0), new Insets(0))));
 
 		//hBox has only labels, so player1.getChildren().get(index) - will be enough, instead of creating playerLabels lists
-		HBox player1 = new HBox();
-		for(int i = 1; i<10; ++i) {
-			Label dummy = new Label(String.format("%d", i));
-			dummy.setFont(Font.font("arial", dummyFont));
-			dummy.setTextFill(Color.RED);
-			dummy.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, new BorderWidths(2))));
-			dummy.setPadding(new Insets(dummyInsetsPadding));
-			dummy.setPrefSize(dummyW, dummyH);
-			dummy.setAlignment(Pos.CENTER);
-			player1.getChildren().add(dummy);
-		}
-		root.getChildren().add(player1);
-		
 		HBox player2 = new HBox();
-		for(int i = 1; i<10; ++i){
+		for(int i = 1; i<10; ++i) {
 			Label dummy = new Label(String.format("%d", i));
 			dummy.setFont(Font.font("arial", dummyFont));
 			dummy.setTextFill(Color.RED);
@@ -78,30 +69,41 @@ public class Pvp implements GameScene {
 			dummy.setAlignment(Pos.CENTER);
 			player2.getChildren().add(dummy);
 		}
-		player2.setLayoutX(0);
-		player2.setLayoutY(dummyH + canvasH);
 		root.getChildren().add(player2);
+		
+		HBox player1 = new HBox();
+		for(int i = 1; i<10; ++i){
+			Label dummy = new Label(String.format("%d", i));
+			dummy.setFont(Font.font("arial", dummyFont));
+			dummy.setTextFill(Color.RED);
+			dummy.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, null, new BorderWidths(2))));
+			dummy.setPadding(new Insets(dummyInsetsPadding));
+			dummy.setPrefSize(dummyW, dummyH);
+			dummy.setAlignment(Pos.CENTER);
+			player1.getChildren().add(dummy);
+		}
+		player1.setLayoutX(0);
+		player1.setLayoutY(dummyH + canvasH);
+		root.getChildren().add(player1);
 		
 		Canvas canvas = new Canvas(canvasW, canvasH);
 		canvas.setLayoutX(0);
 		canvas.setLayoutY(dummyH);
 		g = canvas.getGraphicsContext2D();
 		root.getChildren().add(canvas);
+		control = new PvpControl(canvas, player1, player2);
 		
-		TextField input = new TextField();
+		
 		input.setPrefWidth(rootW);
 		input.setLayoutX(0);
 		input.setLayoutY(canvasH + dummyH*2);
 		input.setOnAction( e-> {
-			AnimationFire fire = new AnimationFire(canvas);
-			int index = 7;
-			fire.setPos(dummyW * index - dummyW/2, canvasH + dummyH);
-			fire.setSpeed(-4);
-			fire.start();
+			String inputText = input.getText();
+			int tmpIndex = Integer.parseInt(input.getText().split(" +")[1], 10);
+			control.cast(canvas, inputText, tmpIndex);
 		});
 		
 		root.getChildren().add(input);
-		
 		return root;
 	}
 	

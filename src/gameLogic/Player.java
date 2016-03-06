@@ -90,12 +90,22 @@ public class Player implements INamedObject {
 				System.out.println(getSkillFromCastLine(castLine) + " wasn't found");
 				return 1;
 			}
-			skills.get(indexSkill).Cast(this, pls.get(index));
+			skills.get(indexSkill).cast(this, pls.get(index));
 		}else {
 			System.out.println("doesn't find this player");
 			return 2;
 		}
 		return 0;
+	}
+	public int cast(String skill, Player onWhom) {
+		int index = findByName(skills, skill);
+		if(index == -1) {
+			System.out.println("doesn't find such skill: " + skill);
+			return 1;
+		}else {
+			skills.get(index).cast(this, onWhom);
+			return 0;
+		}
 	}
 	//effects
 	public int damage(int points, String type) {

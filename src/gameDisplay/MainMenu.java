@@ -74,11 +74,16 @@ public class MainMenu {
 		threeD.setOnAction(e -> {
 			window.startThreeD();
 		});
+		Button pvp = new Button("Pvp");
+		pvp.setOnAction(e -> {
+			window.startPvp();
+		});
+		setBtn(pvp);
 		setBtn(threeD);
 		setBtn(duelMode);
 		setBtn(settings);
 		setBtn(exit);
-		menu.getChildren().addAll(duelMode, settings, threeD, exit);
+		menu.getChildren().addAll(duelMode, settings, threeD, pvp, exit);
 		menu.setAlignment(Pos.BASELINE_CENTER);
 		menu.setSpacing(15);
 		

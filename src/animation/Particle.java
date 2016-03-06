@@ -28,7 +28,7 @@ public class Particle {
 		this.color = color;
 		this.blendMode = blendBode;
 
-		this.decay = 0.1;
+		this.decay = 0.08;
 	}
 	
 	public boolean isAlive() {

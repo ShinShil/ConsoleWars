@@ -9,6 +9,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.paint.Color;
+import pvp.EndAnimationAction;
 
 public class AnimationFire {
 	private AnimationTimer timer;
@@ -22,11 +23,27 @@ public class AnimationFire {
 	private double maxY;
 	private double maxX;
 	private boolean direction; //0 - top, 1 - down
+	private EndAnimationAction endAction;
+	boolean isReachBox;
 	
 	public AnimationFire(Canvas canvas) {
 		this.g = canvas.getGraphicsContext2D();
 		this.maxY = canvas.getHeight();
 		this.maxX = canvas.getWidth();
+		this.endAction = null;
+		//emmiter.setEmmiterOptions(speedX, 123, 0.1, 20);
+		timer = new AnimationTimer() {
+			@Override
+			public void handle(long arg0) {
+				onUpdate();
+			}
+		};
+	}
+	public AnimationFire(Canvas canvas, EndAnimationAction endAction) {
+		this.g = canvas.getGraphicsContext2D();
+		this.maxY = canvas.getHeight();
+		this.maxX = canvas.getWidth();
+		this.endAction = endAction;
 		//emmiter.setEmmiterOptions(speedX, 123, 0.1, 20);
 		timer = new AnimationTimer() {
 			@Override
@@ -43,6 +60,7 @@ public class AnimationFire {
 		this.speedY = speedY;
 	}
 	public void start() {
+		isReachBox = false;
 		timer.start();
 	}
 	public void stop() {
@@ -55,11 +73,20 @@ public class AnimationFire {
 		g.setFill(Color.BLACK);
 		g.fillRect(0,0,maxX,maxY);
 		
-		particles.addAll(emmiter.emmit(x,y));
+		if(!isReachBox) particles.addAll(emmiter.emmit(x,y));
 		x += speedX;
 		y += speedY;
 		
-		System.out.println(particles.size());
+		if(speedY<0 && y<0 || speedY>0 && y>570) {
+			isReachBox = true;
+		}
+		if(particles.size() == 0) {
+			endAction.action();
+			g.setFill(Color.BLACK);
+			g.fillRect(0,0,maxX,maxY);
+			timer.stop();
+		}
+		
 		for(Iterator<Particle> it = particles.iterator(); it.hasNext();) {
 			Particle p = it.next();
 			p.update();
