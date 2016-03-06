@@ -29,7 +29,10 @@ public class Pvp implements GameScene {
 	
 	private GraphicsContext g;
 	private PvpControl control;
-	TextField input = new TextField();
+	private Label hp;
+	private Label def;
+	private Label name;
+	private TextField input = new TextField();
 	@Override
 	public int start(Window window) {
 		Scene scene = new Scene(createContent());
@@ -49,14 +52,22 @@ public class Pvp implements GameScene {
 		int dummyH = 80;
 		int dummyFont = 24;
 		int dummyInsetsPadding = 4;
-		int rootW = dummyW*dummyAmount;
-		int canvasW = rootW;
 		int canvasH = 600;
-		
+		int infoW = 200;
+		int infoH = dummyH*2 + canvasH;
+		int rootW = dummyW*dummyAmount + infoW;
+		int canvasW = rootW;
 		
 		Pane root = new Pane();		
 		root.setBackground(new Background(new BackgroundFill(Color.BLACK , new CornerRadii(0), new Insets(0))));
-
+		
+		Pane infoGame = new Pane();
+		infoGame.setPrefSize(infoW, infoH);
+		infoGame.setStyle("-fx-background-color:rgba(255,255,0,0.5)");
+		infoGame.setLayoutX(0);
+		infoGame.setLayoutY(0);
+		root.getChildren().add(infoGame);
+		
 		//hBox has only labels, so player1.getChildren().get(index) - will be enough, instead of creating playerLabels lists
 		HBox player2 = new HBox();
 		for(int i = 1; i<10; ++i) {
@@ -69,6 +80,8 @@ public class Pvp implements GameScene {
 			dummy.setAlignment(Pos.CENTER);
 			player2.getChildren().add(dummy);
 		}
+		player2.setLayoutX(infoW);
+		player2.setLayoutY(0);
 		root.getChildren().add(player2);
 		
 		HBox player1 = new HBox();
@@ -82,12 +95,12 @@ public class Pvp implements GameScene {
 			dummy.setAlignment(Pos.CENTER);
 			player1.getChildren().add(dummy);
 		}
-		player1.setLayoutX(0);
+		player1.setLayoutX(infoW);
 		player1.setLayoutY(dummyH + canvasH);
 		root.getChildren().add(player1);
 		
 		Canvas canvas = new Canvas(canvasW, canvasH);
-		canvas.setLayoutX(0);
+		canvas.setLayoutX(infoW);
 		canvas.setLayoutY(dummyH);
 		g = canvas.getGraphicsContext2D();
 		root.getChildren().add(canvas);
@@ -103,6 +116,7 @@ public class Pvp implements GameScene {
 			control.cast(canvas, inputText, tmpIndex);
 		});
 		
+		root.setPrefWidth(rootW);
 		root.getChildren().add(input);
 		return root;
 	}
