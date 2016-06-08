@@ -1,1 +1,1 @@
-This the javafx client-server game, i hope you will like it
+This is the javafx game, i hope i will pass KPP :)
